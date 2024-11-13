@@ -6,7 +6,7 @@
 		</Head>
 		<div class="home-page">
 			<video autoplay muted loop class="background-video">
-				<source src="../looping-rockets.mp4" type="video/mp4" />
+				<source src="../public/looping-rockets.mp4" type="video/mp4" />
 				Your browser does not support the video tag.
 			</video>
 		</div>
