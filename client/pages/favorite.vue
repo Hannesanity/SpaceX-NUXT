@@ -1,8 +1,13 @@
 <template>
 	<v-container>
+		<Head>
+			<Title>SpaceX - Favorites</Title>
+			<Meta name="description" content="Experience the future of space exploration with SpaceX" />
+		</Head>
 		<div class="d-flex align-center">
 			<v-icon icon="mdi-rocket" />
 			<h2>SpaceX Favorite Rockets</h2>
+
 			<div class="d-flex align-center ml-auto">
 				<div class="d-inline-flex">
 					<div class="ml-auto">

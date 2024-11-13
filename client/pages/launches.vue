@@ -1,5 +1,9 @@
 <template>
 	<v-container class="">
+		<Head>
+			<Title>SpaceX - Launches</Title>
+			<Meta name="description" content="Experience the future of space exploration with SpaceX" />
+		</Head>
 		<h2>
 			<v-icon icon="mdi-rocket" />
 			Rocket Launches
@@ -32,12 +36,12 @@
 						</div>
 
 						<div class="d-flex align-center">
-							<v-btn class="ma-2" color="red" @click="sortData('asc')">
+							<v-btn class="ma-2" variant="tonal" @click="sortData('asc')">
 								Date(ASC)
 								<v-icon icon="mdi-arrow-up" end />
 							</v-btn>
 
-							<v-btn class="ma-2" color="red" @click="sortData('desc')">
+							<v-btn class="ma-2" variant="tonal" @click="sortData('desc')">
 								Date(DESC)
 								<v-icon icon="mdi-arrow-down" end />
 							</v-btn>
@@ -69,7 +73,7 @@
 								<v-list-item :title="item.raw.mission_name" density="comfortable" lines="two">
 									<template #title>
 										<h5 class="mt-3 text-medium-emphasis">
-											{{ getDate(item.raw.launch_date_utc) }}
+											{{ formatDate(item.raw.launch_date_utc) }}
 										</h5>
 
 										<div class="d-flex align-center mt-3">
@@ -129,8 +133,9 @@
 </template>
 
 <script lang="ts" setup>
-import sort from '../composables/sort'
 import filterByYear from '../composables/filterByYear'
+import formatDate from '../composables/formatDate'
+import sortLaunches from '../composables/sort'
 
 const page = ref(10)
 const getLaunches = gql`
@@ -201,15 +206,7 @@ watch(
 )
 
 const sortData = (order: string) => {
-	launches = sort(launches, order)
-}
-
-const getDate = (dateData: any) => {
-	const date = new Date(dateData)
-	const month = date.getMonth() + 1
-	const day = date.getDate()
-	const year = date.getFullYear()
-	return month + ' - ' + day + ' - ' + year
+	launches = sortLaunches(launches, order)
 }
 
 const getVideoLink = (link?: any) => {

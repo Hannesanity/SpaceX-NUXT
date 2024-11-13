@@ -1,11 +1,20 @@
 <template>
 	<v-container v-if="rocket && rocket !== null">
+		<Head>
+			<Title>SpaceX - {{ rocket.name }}</Title>
+			<Meta name="description" content="Experience the future of space exploration with SpaceX" />
+		</Head>
 		<div class="d-flex align-center">
 			<h2 class="ml-16">SpaceX Rocket Details</h2>
 		</div>
 
 		<v-container class="d-flex">
 			<v-card elevation="0" style="padding: 24px; width: 50%">
+				<div>
+					<v-alert v-if="favoriteMessage" closable text :type="'success'" variant="tonal">
+						{{ favoriteMessage }}
+					</v-alert>
+				</div>
 				<div class="d-flex align-center justify-space-between mx-4">
 					<div class="d-flex justify-content-start">
 						<v-btn variant="outlined" class="ml-3 mb-3" to="/launches">Back to Launches</v-btn>
@@ -62,7 +71,7 @@
 								<v-list-item-subtitle
 									class="text-sm text-grey font-weight-bold text-align-end"
 								>
-									{{ rocket?.first_flight }}
+									{{ formatDate(rocket?.first_flight) }}
 								</v-list-item-subtitle>
 							</v-list-item-content>
 						</v-list-item>
@@ -180,6 +189,7 @@
 
 <script lang="ts" setup>
 import { useFavorite } from '../../stores/useFavorites'
+import formatDate from '../../composables/formatDate'
 
 const favorite = useFavorite()
 
@@ -235,13 +245,27 @@ const { data } = useAsyncQuery<{
 
 const rocket = computed(() => data.value?.rocket ?? [])
 
+let favoriteMessage = ''
+
 const addFavorite = () => {
 	favorite.add(rocket)
+	const router = useRouter()
+	const availableRoutes = router.getRoutes().map((route) => route.path)
+	favoriteMessage = `${rocket.value.name} added to favorites`
+	setTimeout(() => {
+		favoriteMessage = ''
+	}, 3000)
+
+	console.log('availableRoutes', availableRoutes)
 }
 
 const removeFavorite = () => {
 	const rocketData = rocket.value || rocket
 	console.log('Rocket ID to remove:', rocketData.id)
+	favoriteMessage = `${rocketData.name} removed to favorites`
+	setTimeout(() => {
+		favoriteMessage = ''
+	}, 3000)
 
 	favorite.remove(rocketData)
 }
